@@ -1,0 +1,56 @@
+<div id="repo-list" class="bg-gray-800 shadow-md rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-700">
+        <thead class="bg-gray-700">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    <a href="/?sort_by=full_name&sort_order={{ 'desc' if sort_by == 'full_name' and sort_order == 'asc' else 'asc' }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" 
+                       hx-get="/?sort_by=full_name&sort_order={{ 'desc' if sort_by == 'full_name' and sort_order == 'asc' else 'asc' }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" 
+                       hx-target="#repo-list-container" hx-swap="innerHTML" hx-push-url="true" class="hover:text-white">
+                        Name
+                        {% if sort_by == 'full_name' %}
+                            <span class="ml-1">{{ '▲' if sort_order == 'asc' else '▼' }}</span>
+                        {% endif %}
+                    </a>
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Language</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    <a href="/?sort_by=stargazers_count&sort_order={{ 'asc' if sort_by == 'stargazers_count' and sort_order == 'desc' else 'desc' }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" 
+                       hx-get="/?sort_by=stargazers_count&sort_order={{ 'asc' if sort_by == 'stargazers_count' and sort_order == 'desc' else 'desc' }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" 
+                       hx-target="#repo-list-container" hx-swap="innerHTML" hx-push-url="true" class="hover:text-white">
+                        Stars
+                        {% if sort_by == 'stargazers_count' %}
+                            <span class="ml-1">{{ '▲' if sort_order == 'asc' else '▼' }}</span>
+                        {% endif %}
+                    </a>
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Tags</th>
+            </tr>
+        </thead>
+        <tbody class="bg-gray-800 divide-y divide-gray-700">
+            {% for repo in repos %}
+            <tr class="hover:bg-gray-700">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm font-medium text-gray-100">
+                        <a href="{{ repo.url }}" target="_blank" class="text-blue-400 hover:underline">{{ repo.full_name }}</a>
+                    </div>
+                    <div class="text-sm text-gray-400">{{ repo.description }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{{ repo.language or 'N/A' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{{ repo.stargazers_count }}</td>
+                <td id="tags-{{ repo.id }}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                    <form hx-post="/repos/{{ repo.id }}/tags" hx-target="#tags-{{ repo.id }}" hx-swap="outerHTML" class="flex items-center space-x-2">
+                        <input type="text" name="tags" value="{{ repo.tags or '' }}" placeholder="Add tags..." class="bg-gray-700 border border-gray-600 text-gray-200 rounded px-2 py-1 text-sm w-full focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <button type="submit" class="bg-green-600 hover:bg-green-500 text-white font-bold py-1 px-2 rounded text-sm">Save</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" class="px-6 py-4 text-center text-gray-400">
+                    No repositories found. Click "Sync Stars" to fetch them from GitHub.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,4 @@
+<form hx-post="/repos/{{ repo.id }}/tags" hx-target="#tags-{{ repo.id }}" hx-swap="outerHTML" class="flex items-center space-x-2">
+    <input type="text" name="tags" value="{{ repo.tags or '' }}" placeholder="Add tags..." class="bg-gray-700 border border-gray-600 text-gray-200 rounded px-2 py-1 text-sm w-full focus:outline-none focus:ring-1 focus:ring-blue-500">
+    <button type="submit" class="bg-green-600 hover:bg-green-500 text-white font-bold py-1 px-2 rounded text-sm">Save</button>
+</form>
