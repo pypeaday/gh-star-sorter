@@ -1,0 +1,5 @@
+{% if flash_message %}
+<div class="p-4 mb-4 text-sm rounded-lg {% if 'error' in flash_message|lower or 'invalid' in flash_message|lower %}bg-red-900 text-red-300{% else %}bg-blue-900 text-blue-300{% endif %}" role="alert">
+    {{ flash_message }}
+</div>
+{% endif %}
