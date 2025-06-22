@@ -24,6 +24,9 @@
                     </a>
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Tags</th>
+                <th scope="col" class="relative px-6 py-3">
+                    <span class="sr-only">Actions</span>
+                </th>
             </tr>
         </thead>
         <tbody class="bg-gray-800 divide-y divide-gray-700">
@@ -39,6 +42,11 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{{ repo.stargazers_count }}</td>
                 <td id="tags-{{ repo.id }}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                     {% include "_repo_tags.html" %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <form hx-post="/repos/{{ repo.id }}/create-ticket" hx-swap="none">
+                        <button type="submit" class="text-indigo-400 hover:text-indigo-300">Create Ticket</button>
+                    </form>
                 </td>
             </tr>
             {% else %}

@@ -4,6 +4,9 @@ import logging
 from . import models, schemas
 
 
+def get_repo(db: Session, repo_id: int):
+    return db.query(models.Repository).filter(models.Repository.id == repo_id).first()
+
 def get_repo_by_repo_id(db: Session, repo_id: int):
     return db.query(models.Repository).filter(models.Repository.repo_id == repo_id).first()
 

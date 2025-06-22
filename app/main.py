@@ -1,13 +1,13 @@
 import logging
 import os
 
-from fastapi import FastAPI, Request, Depends, Form
+from fastapi import FastAPI, Request, Depends, Form, Response, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 
-from . import models, crud, github, schemas
+from . import models, crud, github, schemas, kanboard
 from .database import engine, SessionLocal
 
 # Configure logging
@@ -87,4 +87,32 @@ async def sync_stars(request: Request, db: Session = Depends(get_db)):
 async def update_tags(request: Request, repo_id: int, tags: str = Form(...), db: Session = Depends(get_db)):
     crud.update_repo_tags(db, repo_id=repo_id, tags=tags)
     repo = db.query(models.Repository).filter(models.Repository.id == repo_id).first()
+    request.session['flash'] = f"Tags for {repo.full_name} updated successfully!"
     return templates.TemplateResponse("_repo_tags.html", {"request": request, "repo": repo})
+
+@app.post("/repos/{repo_id}/create-ticket")
+async def create_ticket_for_repo(
+    request: Request,
+    repo_id: int,
+    db: Session = Depends(get_db)
+):
+    repo = crud.get_repo(db, repo_id)
+    if not repo:
+        raise HTTPException(status_code=404, detail="Repository not found")
+
+    title = f"Review Starred Repo: {repo.full_name}"
+    description = f"URL: {repo.url}\n\nDescription: {repo.description or 'N/A'}\n\nTags: {repo.tags or 'None'}"
+    
+    tags = [tag.strip() for tag in repo.tags.split(",")] if repo.tags else []
+
+    try:
+        task_id = kanboard.create_kanboard_task(title=title, description=description, tags=tags)
+        request.session['flash'] = f"Successfully created Kanboard ticket #{task_id} for {repo.full_name}."
+    except Exception as e:
+        logging.error(f"Failed to create Kanboard ticket for repo {repo.id}: {e}")
+        request.session['flash'] = f"Error: Could not create Kanboard ticket. {e}"
+
+    # This endpoint is called via HTMX but we don't need to return any content,
+    # just set the flash message, which will be displayed on the next page refresh/load.
+    # A 204 No Content response is appropriate here.
+    return Response(status_code=204)
