@@ -12,4 +12,5 @@ class Repository(Base):
     description = Column(Text, nullable=True)
     language = Column(String, nullable=True)
     stargazers_count = Column(Integer)
-    tags = Column(String, nullable=True) # For now, a simple comma-separated string
+    tags = Column(String, nullable=True)
+    kanboard_ticket_id = Column(Integer, nullable=True) # For now, a simple comma-separated string

@@ -44,9 +44,13 @@
                     {% include "_repo_tags.html" %}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <form hx-post="/repos/{{ repo.id }}/create-ticket" hx-target="#flash-messages" hx-swap="innerHTML">
-                        <button type="submit" class="text-indigo-400 hover:text-indigo-300">Create Ticket</button>
-                    </form>
+                    {% if repo.kanboard_ticket_id %}
+                        <span class="text-sm text-gray-500">Ticket #{{ repo.kanboard_ticket_id }}</span>
+                    {% else %}
+                        <form hx-post="/repos/{{ repo.id }}/create-ticket" hx-target="#flash-messages" hx-swap="innerHTML">
+                            <button type="submit" class="text-indigo-400 hover:text-indigo-300">Create Ticket</button>
+                        </form>
+                    {% endif %}
                 </td>
             </tr>
             {% else %}

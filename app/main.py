@@ -101,6 +101,8 @@ async def create_ticket_for_repo(
 
     if not repo:
         flash_message = "Error: Repository not found."
+    elif repo.kanboard_ticket_id:
+        flash_message = f"Error: A ticket ({repo.kanboard_ticket_id}) already exists for {repo.full_name}."
     else:
         title = f"Review Starred Repo: {repo.full_name}"
         description = f"URL: {repo.url}\n\nDescription: {repo.description or 'N/A'}\n\nTags: {repo.tags or 'None'}"
@@ -108,6 +110,7 @@ async def create_ticket_for_repo(
 
         try:
             task_id = kanboard.create_kanboard_task(title=title, description=description, tags=tags)
+            crud.update_repo_kanboard_ticket_id(db, repo_id=repo.id, ticket_id=task_id)
             flash_message = f"Successfully created Kanboard ticket #{task_id} for {repo.full_name}."
         except Exception as e:
             logging.error(f"Failed to create Kanboard ticket for repo {repo.id}: {e}")

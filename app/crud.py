@@ -26,6 +26,14 @@ def get_all_repos(db: Session, skip: int = 0, limit: int = 1000, tag: str | None
 
 
 
+def update_repo_kanboard_ticket_id(db: Session, repo_id: int, ticket_id: int):
+    db_repo = db.query(models.Repository).filter(models.Repository.id == repo_id).first()
+    if db_repo:
+        db_repo.kanboard_ticket_id = ticket_id
+        db.commit()
+        db.refresh(db_repo)
+    return db_repo
+
 def update_repo_tags(db: Session, repo_id: int, tags: str):
     db_repo = db.query(models.Repository).filter(models.Repository.id == repo_id).first()
     if db_repo:
