@@ -63,12 +63,23 @@ Follow these steps to set up and run the application locally.
     ```
     The application uses `python-dotenv` to load this variable automatically. Alternatively, you can use a tool like `direnv`.
 
-6.  **Run the application:**
+6.  **Configure Kanboard Integration (Optional):**
+    To create Kanboard tickets directly from the application, you need to provide your Kanboard instance details. Add the following variables to your `.env` file:
+    ```
+    KANBOARD_URL="https://your-kanboard-instance.com/jsonrpc.php"
+    KANBOARD_API_TOKEN="your_kanboard_api_token"
+    KANBOARD_PROJECT_ID="your_project_id"
+    ```
+    -   `KANBOARD_URL`: The full URL to your Kanboard `jsonrpc.php` endpoint.
+    -   `KANBOARD_API_TOKEN`: Your personal API token from Kanboard's settings.
+    -   `KANBOARD_PROJECT_ID`: The ID of the project where you want to create tickets.
+
+7.  **Run the application:**
     ```bash
     uvicorn app.main:app --reload
     ```
 
-7.  **Open in your browser:**
+8.  **Open in your browser:**
     Navigate to [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
 ---

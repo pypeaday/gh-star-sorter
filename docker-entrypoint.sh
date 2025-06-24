@@ -5,10 +5,11 @@ export VIRTUAL_ENV=/opt/venv
 
 echo "Starting Star Sorter application..."
 
-# Run database migrations if alembic is available
-if command -v alembic &> /dev/null; then
-    echo "Running database migrations..."
-    alembic upgrade head
+# Run database init
+# check if data/gh_stars.db exists
+if [ ! -f data/gh_stars.db ]; then
+    echo "Initializing database..."
+    python app/database.py
 fi
 
 # Start the application

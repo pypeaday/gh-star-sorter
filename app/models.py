@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text
+from sqlalchemy import Column, Integer, String, Text, DateTime
+from sqlalchemy.sql import func
 from .database import Base
 
 class Repository(Base):
@@ -13,4 +14,5 @@ class Repository(Base):
     language = Column(String, nullable=True)
     stargazers_count = Column(Integer)
     tags = Column(String, nullable=True)
-    kanboard_ticket_id = Column(Integer, nullable=True) # For now, a simple comma-separated string
+    kanboard_ticket_id = Column(Integer, nullable=True)
+    synced_at = Column(DateTime(timezone=True), server_default=func.now()) # For now, a simple comma-separated string
