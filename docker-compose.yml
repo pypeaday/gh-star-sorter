@@ -1,0 +1,9 @@
+services:
+  star-sorter:
+    build: .
+    ports:
+      - "8084:8000"
+    volumes:
+      - ./app:/app/app
+    env_file: .env
+    restart: unless-stopped
