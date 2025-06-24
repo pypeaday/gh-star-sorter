@@ -10,6 +10,9 @@ from starlette.middleware.sessions import SessionMiddleware
 from . import models, crud, github, schemas, kanboard
 from .database import engine, SessionLocal
 
+from datetime import datetime
+import zoneinfo
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -21,6 +24,18 @@ app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key=os.urandom(24).hex())
 
 templates = Jinja2Templates(directory="templates")
+
+def format_datetime_cdt(dt: datetime | None):
+    """Converts a datetime object to the 'America/Chicago' timezone and formats it."""
+    if not dt:
+        return "N/A"
+    # The 'synced_at' column is timezone-aware from the DB (timezone=True).
+    # We just need to convert it to the desired zone.
+    chicago_tz = zoneinfo.ZoneInfo("America/Chicago")
+    dt_in_chicago_tz = dt.astimezone(chicago_tz)
+    return dt_in_chicago_tz.strftime("%Y-%m-%d %H:%M")
+
+templates.env.filters['datetime_cdt'] = format_datetime_cdt
 
 # Dependency to get DB session
 def get_db():

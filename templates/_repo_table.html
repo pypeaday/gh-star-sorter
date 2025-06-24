@@ -1,11 +1,11 @@
-<div id="repo-list" class="bg-gray-800 shadow-md rounded-lg overflow-hidden">
+<div id="repo-list-container" class="bg-gray-800 shadow-md rounded-lg overflow-hidden">
     <table class="min-w-full divide-y divide-gray-700">
         <thead class="bg-gray-700">
             <tr>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-2/5">
                     <a href="/?sort_by=full_name&sort_order={{ 'desc' if sort_by == 'full_name' and sort_order == 'asc' else 'asc' }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" 
                        hx-get="/?sort_by=full_name&sort_order={{ 'desc' if sort_by == 'full_name' and sort_order == 'asc' else 'asc' }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" 
-                       hx-target="#repo-list-container" hx-swap="innerHTML" hx-push-url="true" class="hover:text-white">
+                       hx-target="#repo-list-container" hx-swap="outerHTML" hx-push-url="true" class="hover:text-white">
                         Name
                         {% if sort_by == 'full_name' %}
                             <span class="ml-1">{{ '▲' if sort_order == 'asc' else '▼' }}</span>
@@ -16,7 +16,7 @@
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     <a href="/?sort_by=stargazers_count&sort_order={{ 'asc' if sort_by == 'stargazers_count' and sort_order == 'desc' else 'desc' }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" 
                        hx-get="/?sort_by=stargazers_count&sort_order={{ 'asc' if sort_by == 'stargazers_count' and sort_order == 'desc' else 'desc' }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" 
-                       hx-target="#repo-list-container" hx-swap="innerHTML" hx-push-url="true" class="hover:text-white">
+                       hx-target="#repo-list-container" hx-swap="outerHTML" hx-push-url="true" class="hover:text-white">
                         Stars
                         {% if sort_by == 'stargazers_count' %}
                             <span class="ml-1">{{ '▲' if sort_order == 'asc' else '▼' }}</span>
@@ -24,7 +24,16 @@
                     </a>
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Tags</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Synced At</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    <a href="/?sort_by=synced_at&sort_order={{ 'asc' if sort_by == 'synced_at' and sort_order == 'desc' else 'desc' }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" 
+                       hx-get="/?sort_by=synced_at&sort_order={{ 'asc' if sort_by == 'synced_at' and sort_order == 'desc' else 'desc' }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}" 
+                       hx-target="#repo-list-container" hx-swap="outerHTML" hx-push-url="true" class="hover:text-white">
+                        Synced At
+                        {% if sort_by == 'synced_at' %}
+                            <span class="ml-1">{{ '▲' if sort_order == 'asc' else '▼' }}</span>
+                        {% endif %}
+                    </a>
+                </th>
                 <th scope="col" class="relative px-6 py-3">
                     <span class="sr-only">Actions</span>
                 </th>
@@ -44,7 +53,7 @@
                 <td id="tags-{{ repo.id }}" class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                     {% include "_repo_tags.html" %}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{{ repo.synced_at.strftime('%Y-%m-%d %H:%M') if repo.synced_at else 'N/A' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{{ repo.synced_at | datetime_cdt }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     {% if repo.kanboard_ticket_id %}
                         <span class="text-sm text-gray-500">Ticket #{{ repo.kanboard_ticket_id }}</span>
