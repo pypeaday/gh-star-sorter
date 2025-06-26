@@ -28,33 +28,19 @@ GitHub’s default star list offers little organization, making it hard to remem
 
 ## Getting Started
 
-Follow these steps to set up and run the application locally.
+Easiest way is with docker
 
 1.  **Clone the repository:**
     ```bash
     git clone https://github.com/pypeaday/gh-star-sorter.git
     cd gh-star-sorter
     ```
-
-2.  **Create and activate a virtual environment:**
-    ```bash
-    uv venv
-    source .venv/bin/activate
-    ```
-
-3.  **Install dependencies:**
-    ```bash
-    uv sync
-    ```
-
-4.  **Create a GitHub Personal Access Token (PAT):**
+2.  **Create a GitHub Personal Access Token (PAT):**
     - Easiest way is with the github cli `gh auth token`
-    - Add the token to your environment variables:
-    ```bash
-    export GITHUB_TOKEN="your_personal_access_token_here"
-    ```
+    - Add the token to you .env file - see [.env.example](.env.example)
 
-6.  **Configure Kanboard Integration (Optional):**
+3.  **Configure Kanboard Integration (Optional):**
+    If you don't use kanboard go to step 4.
     To create Kanboard tickets directly from the application, you need to provide your Kanboard instance details. Add the following variables to your `.env` file:
     ```
     KANBOARD_URL="https://your-kanboard-instance.com/jsonrpc.php"
@@ -65,13 +51,13 @@ Follow these steps to set up and run the application locally.
     -   `KANBOARD_API_TOKEN`: Your personal API token from Kanboard's settings.
     -   `KANBOARD_PROJECT_ID`: The ID of the project where you want to create tickets.
 
-7.  **Run the application:**
+4.  **Run docker compose:**
     ```bash
-    uvicorn app.main:app --reload
+    docker compose up -d
     ```
 
-8.  **Open in your browser:**
-    Navigate to [http://127.0.0.1:8000](http://127.0.0.1:8000).
+5.  **Access the application:**
+    Open your browser and navigate to `http://localhost:8000`.
 
 ---
 

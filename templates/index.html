@@ -14,6 +14,7 @@
     <link rel="icon" href="{{ url_for('static', path='favicon.svg') }}" type="image/svg+xml">
 </head>
 <body class="bg-gray-900 text-gray-200">
+    {% include "_navbar.html" %}
     <div class="container mx-auto p-4">
         <div id="flash-messages">
             {% if flash_message %}
@@ -52,5 +53,8 @@
         </div>
 
         {% include "_repo_table.html" %}
+
+
+    </div>
 </body>
 </html>

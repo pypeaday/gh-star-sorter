@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
 
 from . import models, crud, github, schemas, kanboard
+from .__about__ import __version__
 from .database import engine, SessionLocal
 
 from datetime import datetime
@@ -44,6 +45,17 @@ def format_datetime_cdt(dt: datetime | None):
     return dt_in_chicago_tz.strftime("%Y-%m-%d %H:%M")
 
 templates.env.filters['datetime_cdt'] = format_datetime_cdt
+templates.env.globals['app_version'] = __version__
+
+# Add Kanboard link to globals
+KANBOARD_URL = os.getenv("KANBOARD_URL")
+KANBOARD_PROJECT_ID = os.getenv("KANBOARD_PROJECT_ID")
+kanboard_link = "https://kanboard.com"
+if KANBOARD_URL and KANBOARD_PROJECT_ID:
+    # Assumes KANBOARD_URL is the JSON-RPC endpoint, strip it to get the base URL
+    base_url = KANBOARD_URL.replace("/jsonrpc.php", "")
+    kanboard_link = f"{base_url}/?controller=BoardViewController&action=show&project_id={KANBOARD_PROJECT_ID}"
+templates.env.globals['kanboard_link'] = kanboard_link
 
 # Dependency to get DB session
 def get_db():
