@@ -3,6 +3,7 @@ import os
 
 from fastapi import FastAPI, Request, Depends, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from starlette.middleware.sessions import SessionMiddleware
@@ -20,8 +21,15 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
 # Add session middleware for flash messages
 app.add_middleware(SessionMiddleware, secret_key=os.urandom(24).hex())
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon_redirect():
+    return RedirectResponse(url="/static/favicon.svg")
 
 templates = Jinja2Templates(directory="templates")
 
