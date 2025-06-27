@@ -12,6 +12,21 @@
     </script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <link rel="icon" href="{{ url_for('static', path='favicon.svg') }}" type="image/svg+xml">
+    <style>
+        /* Hide indicator by default */
+        .htmx-indicator {
+            display: none;
+        }
+        /* Show indicator when htmx-request class is present */
+        .htmx-request .htmx-indicator {
+            display: flex; /* Use flex to align icon and text */
+            align-items: center;
+        }
+        /* Hide default content when htmx-request class is present */
+        .htmx-request .htmx-no-indicator {
+            display: none;
+        }
+    </style>
 </head>
 <body class="bg-gray-900 text-gray-200">
     {% include "_navbar.html" %}
@@ -21,17 +36,34 @@
                 {% include "_flash_message.html" %}
             {% endif %}
         </div>
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-white">GitHub Star Sorter</h1>
-            <button hx-post="/sync" hx-indicator="#sync-spinner" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
-                <span id="sync-spinner" class="htmx-indicator">
-                    <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <div class="flex justify-end items-center mb-6">
+            <!-- 
+              This button uses a standard HTMX pattern for loading states.
+              - The button is a flex container to center its content.
+              - It has two direct children: one for the default state, one for the loading state.
+              - The CSS in the <head> handles showing/hiding the correct state.
+              - `htmx-no-indicator`: Shown by default, hidden during request.
+              - `htmx-indicator`: Hidden by default, shown during request.
+            -->
+            <button hx-post="/sync" hx-disabled-elt="this"
+                    class="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-all duration-300 ease-in-out flex items-center justify-center disabled:opacity-50 min-w-[150px]">
+                
+                <!-- Default State: Icon and text for a richer look -->
+                <span class="htmx-no-indicator flex items-center">
+                    <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0011.664 0l3.181-3.183m-3.181-4.991v4.99" />
+                    </svg>
+                    Sync Stars
+                </span>
+
+                <!-- Loading State -->
+                <span class="htmx-indicator flex items-center">
+                    <svg class="animate-spin -ml-1 h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
+                    Syncing...
                 </span>
-                <span class="htmx-no-indicator">Sync Stars</span>
-                <span class="htmx-indicator">Syncing...</span>
             </button>
         </div>
 
