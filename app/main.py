@@ -10,7 +10,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from . import models, crud, github, schemas, kanboard
 from .__about__ import __version__
-from .database import engine, SessionLocal
+from .database import SessionLocal, init_db
 
 from datetime import datetime
 import zoneinfo
@@ -18,9 +18,11 @@ import zoneinfo
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-models.Base.metadata.create_all(bind=engine)
-
 app = FastAPI()
+
+@app.on_event("startup")
+def on_startup():
+    init_db()
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 

@@ -5,7 +5,5 @@ services:
       - "8084:8000"
     volumes:
       - ./app:/app/app
-      - ./templates:/app/templates
-      - ./data:/app/data
     env_file: .env
     restart: unless-stopped
