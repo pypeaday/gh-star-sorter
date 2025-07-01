@@ -3,7 +3,11 @@
 A tool to pull your GitHub starred repositories and organize them with custom tags, making it easier to manage and find projects among hundreds or thousands of stars.
 
 **Why?**
-GitHub’s default star list offers little organization, making it hard to remember why you starred something or to find projects you want to revisit. This tool lets you tag stars by categories like "Want to Try," "For Learning," "Tried & Disliked," or any custom tag you need[1][2].
+GitHub’s default star list offers little organization, making it hard to remember why you starred something or to find projects you want to revisit. This tool lets you tag stars by categories like "Want to Try," "For Learning," "Tried & Disliked," or any custom tag you need.
+
+---
+
+![20250701125804_c41ec692.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250701125804_c41ec692.png)
 
 ---
 
